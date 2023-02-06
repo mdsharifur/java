@@ -1,0 +1,47 @@
+class BankAccount {
+  private int balance;
+
+  public BankAccount(int balance) {
+    this.balance = balance;
+  }
+
+  public void deposit(int amount) {
+    balance += amount;
+  }
+
+  public void withdraw(int amount) {
+    balance -= amount;
+  }
+
+  public int getBalance() {
+    return balance;
+  }
+}
+
+class Customer implements Runnable {
+  private BankAccount account;
+
+  public Customer(BankAccount account) {
+    this.account = account;
+  }
+
+  public void run() {
+    for (int i = 0; i < 5; i++) {
+      account.deposit(100);
+      account.withdraw(50);
+      System.out.println(Thread.currentThread().getName() + ": " + account.getBalance());
+    }
+  }
+}
+
+public class Main {
+  public static void main(String[] args) {
+    BankAccount account = new BankAccount(1000);
+    Customer c1 = new Customer(account);
+    Customer c2 = new Customer(account);
+    Thread t1 = new Thread(c1);
+    Thread t2 = new Thread(c2);
+    t1.start();
+    t2.start();
+  }
+}
